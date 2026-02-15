@@ -54,10 +54,62 @@ chown -R www-data:www-data /var/www/html || true
 chmod -R 775 /var/www/html/storage || true
 chmod -R 775 /var/www/html/bootstrap/cache || true
 
-# Ejecutar migraciones si es necesario (opcional, descomentar si se necesita)
-# php artisan migrate --force || true
+# Esperar a que la base de datos esté disponible (máximo 30 segundos)
+echo "Esperando conexión a la base de datos..."
+timeout=30
+counter=0
+db_connected=false
+
+while [ $counter -lt $timeout ] && [ "$db_connected" = false ]; do
+    # Intentar conectar usando un script PHP simple
+    if php -r "
+        try {
+            \$host = getenv('DB_HOST') ?: '127.0.0.1';
+            \$port = getenv('DB_PORT') ?: '3306';
+            \$user = getenv('DB_USERNAME') ?: 'root';
+            \$pass = getenv('DB_PASSWORD') ?: '';
+            \$db = getenv('DB_DATABASE') ?: '';
+            \$dsn = \"mysql:host=\$host;port=\$port\";
+            if (\$db) \$dsn .= \";dbname=\$db\";
+            \$pdo = new PDO(\$dsn, \$user, \$pass);
+            \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            exit(0);
+        } catch (Exception \$e) {
+            exit(1);
+        }
+    " 2>/dev/null; then
+        echo "✓ Conexión a la base de datos establecida"
+        db_connected=true
+        break
+    fi
+    echo "Intentando conectar... ($counter/$timeout)"
+    sleep 1
+    counter=$((counter + 1))
+done
+
+if [ "$db_connected" = false ]; then
+    echo "⚠ Advertencia: No se pudo verificar la conexión a la base de datos, continuando..."
+fi
+
+# Optimizar Laravel para producción
+echo "Optimizando Laravel..."
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
+
+# Crear enlace simbólico de storage si no existe
+if [ ! -L /var/www/html/public/storage ]; then
+    php artisan storage:link || true
+fi
+
+# Ejecutar migraciones
+echo "Ejecutando migraciones..."
+php artisan migrate --force || {
+    echo "Error al ejecutar migraciones"
+    exit 1
+}
 
 # Iniciar el servidor
-# Usar formato con = y asegurar que PORT es un número
+echo "Iniciando servidor en ${HOST}:${PORT}..."
 exec php artisan serve --host="${HOST}" --port="${PORT}"
 
