@@ -44,6 +44,26 @@ fi
 # Asegurar que DB_CONNECTION esté configurada
 export DB_CONNECTION=${DB_CONNECTION:-mysql}
 
+# Configurar APP_URL para HTTPS si no está configurado y estamos en producción
+if [ -z "$APP_URL" ]; then
+    # Detectar URL desde headers o variables de entorno
+    if [ -n "$RAILWAY_PUBLIC_DOMAIN" ]; then
+        export APP_URL="https://${RAILWAY_PUBLIC_DOMAIN}"
+    elif [ -n "$VERCEL_URL" ]; then
+        export APP_URL="https://${VERCEL_URL}"
+    elif [ "$APP_ENV" = "production" ]; then
+        # Si estamos en producción, asumir HTTPS
+        export APP_URL="https://proyecto-estudio-production.up.railway.app"
+    fi
+fi
+
+# Forzar HTTPS en producción para assets
+if [ "$APP_ENV" = "production" ] || [ -n "$APP_URL" ]; then
+    # Asegurar que APP_URL use HTTPS
+    export APP_URL=$(echo "$APP_URL" | sed 's|^http://|https://|')
+    export ASSET_URL="${APP_URL}"
+fi
+
 # Asegurar que los directorios existen
 mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
 mkdir -p /var/www/html/storage/logs

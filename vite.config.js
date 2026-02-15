@@ -8,5 +8,15 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        https: false,
+        hmr: {
+            host: 'localhost',
+        },
+    },
+    build: {
+        // Asegurar que los assets se generen con URLs relativas o absolutas HTTPS
+        assetsDir: 'assets',
+    },
 });
 
