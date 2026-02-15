@@ -3,132 +3,150 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+<div class="row g-4 mb-4">
     <!-- Stats Cards -->
-    <div class="card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <div style="font-size: 12px; color: #6c757d; text-transform: uppercase; margin-bottom: 5px;">Total Ritmos</div>
-                <div style="font-size: 28px; font-weight: 700; color: #1e293b;">{{ $ritmosCount ?? 0 }}</div>
-                <div style="font-size: 12px; color: #10b981; margin-top: 5px;">
-                    <i class="fas fa-arrow-up"></i> 12% desde la semana pasada
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase mb-1">Total Ritmos</div>
+                        <div class="h3 mb-0 fw-bold">{{ $totalRitmos ?? 0 }}</div>
+                        <div class="text-success small mt-1">
+                            <i class="bi bi-arrow-up"></i> 12% desde la semana pasada
+                        </div>
+                    </div>
+                    <div class="bg-primary bg-gradient rounded-3 p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-music-note-list text-white" style="font-size: 28px;"></i>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-music" style="font-size: 28px; color: #fff;"></i>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <div style="font-size: 12px; color: #6c757d; text-transform: uppercase; margin-bottom: 5px;">Total Videos</div>
-                <div style="font-size: 28px; font-weight: 700; color: #1e293b;">{{ $videosCount ?? 0 }}</div>
-                <div style="font-size: 12px; color: #10b981; margin-top: 5px;">
-                    <i class="fas fa-arrow-up"></i> 8% desde la semana pasada
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase mb-1">Total Videos</div>
+                        <div class="h3 mb-0 fw-bold">{{ $totalVideos ?? 0 }}</div>
+                        <div class="text-success small mt-1">
+                            <i class="bi bi-arrow-up"></i> 8% desde la semana pasada
+                        </div>
+                    </div>
+                    <div class="bg-success bg-gradient rounded-3 p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-play-circle text-white" style="font-size: 28px;"></i>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-video" style="font-size: 28px; color: #fff;"></i>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <div style="font-size: 12px; color: #6c757d; text-transform: uppercase; margin-bottom: 5px;">Total Partituras</div>
-                <div style="font-size: 28px; font-weight: 700; color: #1e293b;">{{ $partiturasCount ?? 0 }}</div>
-                <div style="font-size: 12px; color: #10b981; margin-top: 5px;">
-                    <i class="fas fa-arrow-up"></i> 5% desde la semana pasada
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase mb-1">Total Partituras</div>
+                        <div class="h3 mb-0 fw-bold">{{ $totalPartituras ?? 0 }}</div>
+                        <div class="text-success small mt-1">
+                            <i class="bi bi-arrow-up"></i> 5% desde la semana pasada
+                        </div>
+                    </div>
+                    <div class="bg-warning bg-gradient rounded-3 p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-file-earmark-music text-white" style="font-size: 28px;"></i>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-file-alt" style="font-size: 28px; color: #fff;"></i>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <div style="font-size: 12px; color: #6c757d; text-transform: uppercase; margin-bottom: 5px;">Usuarios Activos</div>
-                <div style="font-size: 28px; font-weight: 700; color: #1e293b;">{{ $usersCount ?? 0 }}</div>
-                <div style="font-size: 12px; color: #10b981; margin-top: 5px;">
-                    <i class="fas fa-arrow-up"></i> 3% desde la semana pasada
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase mb-1">Usuarios Activos</div>
+                        <div class="h3 mb-0 fw-bold">{{ $totalUsers ?? 0 }}</div>
+                        <div class="text-success small mt-1">
+                            <i class="bi bi-arrow-up"></i> 3% desde la semana pasada
+                        </div>
+                    </div>
+                    <div class="bg-info bg-gradient rounded-3 p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-people text-white" style="font-size: 28px;"></i>
+                    </div>
                 </div>
-            </div>
-            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-users" style="font-size: 28px; color: #fff;"></i>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Welcome Card -->
-<div class="card">
+<div class="card mb-4">
     <div class="card-header">
-        <h2 class="card-title">
-            <i class="fas fa-user-circle" style="margin-right: 10px; color: #6366f1;"></i>
+        <h2 class="card-title mb-0">
+            <i class="bi bi-person-circle me-2"></i>
             Bienvenido, {{ $user->name }}
         </h2>
     </div>
     
-    <div style="margin-bottom: 20px;">
-        <p style="color: #6c757d; margin-bottom: 15px;">
-            <strong>Rol:</strong>
-            @php
-                $roles = $user->getRoleNames();
-            @endphp
-            @if($roles->count() > 0)
-                @foreach($roles as $role)
-                    <span class="badge badge-success" style="margin-left: 8px;">{{ ucfirst($role) }}</span>
-                @endforeach
-            @else
-                <span class="badge badge-warning" style="margin-left: 8px;">Sin rol asignado</span>
-            @endif
-        </p>
-        
-        <p style="color: #6c757d; margin-bottom: 20px;">
-            Bienvenido a la plataforma de aprendizaje de la Escuela de Tambores. 
-            Aquí podrás acceder a ritmos, videos y partituras para mejorar tus habilidades.
-        </p>
-    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <p class="text-muted mb-2">
+                <strong>Rol:</strong>
+                @php
+                    $roles = $user->getRoleNames();
+                @endphp
+                @if($roles->count() > 0)
+                    @foreach($roles as $role)
+                        <span class="badge bg-primary ms-2">{{ ucfirst($role) }}</span>
+                    @endforeach
+                @else
+                    <span class="badge bg-warning ms-2">Sin rol asignado</span>
+                @endif
+            </p>
+            
+            <p class="text-muted">
+                Bienvenido a la plataforma de aprendizaje de la Escuela de Tambores. 
+                Aquí podrás acceder a ritmos, videos y partituras para mejorar tus habilidades.
+            </p>
+        </div>
 
-    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-        <a href="{{ route('ritmos.index') }}" class="btn btn-primary">
-            <i class="fas fa-music"></i>
-            Ver Ritmos
-        </a>
-        
-        @can('create', App\Models\Ritmo::class)
-        <a href="{{ route('ritmos.create') }}" class="btn btn-success">
-            <i class="fas fa-plus"></i>
-            Crear Ritmo
-        </a>
-        @endcan
-        
-        @can('viewAny', App\Models\Video::class)
-        <a href="#" class="btn" style="background: #3b82f6; color: #fff;">
-            <i class="fas fa-video"></i>
-            Ver Videos
-        </a>
-        @endcan
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ route('ritmos.index') }}" class="btn btn-primary">
+                <i class="bi bi-music-note-list me-2"></i>
+                Ver Ritmos
+            </a>
+            
+            @can('create', App\Models\Ritmo::class)
+            <a href="{{ route('ritmos.create') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>
+                Crear Ritmo
+            </a>
+            @endcan
+            
+            @can('viewAny', App\Models\Video::class)
+            <a href="#" class="btn btn-info">
+                <i class="bi bi-play-circle me-2"></i>
+                Ver Videos
+            </a>
+            @endcan
+        </div>
     </div>
 </div>
 
 <!-- Recent Activity -->
 <div class="card">
     <div class="card-header">
-        <h2 class="card-title">
-            <i class="fas fa-clock" style="margin-right: 10px; color: #6366f1;"></i>
+        <h2 class="card-title mb-0">
+            <i class="bi bi-clock-history me-2"></i>
             Actividad Reciente
         </h2>
     </div>
     
-    <div style="color: #6c757d;">
-        <p>No hay actividad reciente para mostrar.</p>
+    <div class="card-body">
+        <p class="text-muted mb-0">No hay actividad reciente para mostrar.</p>
     </div>
 </div>
 @endsection
