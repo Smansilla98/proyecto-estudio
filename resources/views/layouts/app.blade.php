@@ -100,9 +100,16 @@
                     <div style="text-align: left;">
                         <div style="font-weight: 600; font-size: 14px; color: #1e293b;">{{ Auth::user()->name }}</div>
                         <div style="font-size: 12px; color: #6c757d;">
-                            @foreach(Auth::user()->getRoleNames() as $role)
-                                {{ ucfirst($role) }}
-                            @endforeach
+                            @php
+                                $userRoles = Auth::user()->getRoleNames();
+                            @endphp
+                            @if($userRoles->count() > 0)
+                                @foreach($userRoles as $role)
+                                    {{ ucfirst($role) }}
+                                @endforeach
+                            @else
+                                Usuario
+                            @endif
                         </div>
                     </div>
                     <i class="fas fa-chevron-down" style="font-size: 12px; color: #6c757d;"></i>

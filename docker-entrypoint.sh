@@ -109,6 +109,12 @@ php artisan migrate --force || {
     exit 1
 }
 
+# Ejecutar seeders (roles y permisos) solo si las tablas están vacías
+echo "Verificando seeders..."
+php artisan db:seed --class=RolePermissionSeeder --force || {
+    echo "⚠ Advertencia: No se pudieron ejecutar los seeders (puede que ya existan datos)"
+}
+
 # Iniciar el servidor
 echo "Iniciando servidor en ${HOST}:${PORT}..."
 exec php artisan serve --host="${HOST}" --port="${PORT}"

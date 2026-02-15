@@ -78,9 +78,16 @@
     <div style="margin-bottom: 20px;">
         <p style="color: #6c757d; margin-bottom: 15px;">
             <strong>Rol:</strong>
-            @foreach($user->getRoleNames() as $role)
-                <span class="badge badge-success" style="margin-left: 8px;">{{ ucfirst($role) }}</span>
-            @endforeach
+            @php
+                $roles = $user->getRoleNames();
+            @endphp
+            @if($roles->count() > 0)
+                @foreach($roles as $role)
+                    <span class="badge badge-success" style="margin-left: 8px;">{{ ucfirst($role) }}</span>
+                @endforeach
+            @else
+                <span class="badge badge-warning" style="margin-left: 8px;">Sin rol asignado</span>
+            @endif
         </p>
         
         <p style="color: #6c757d; margin-bottom: 20px;">
