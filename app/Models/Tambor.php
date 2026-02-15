@@ -10,6 +10,8 @@ class Tambor extends Model
 {
     use HasFactory;
 
+    protected $table = 'tambores';
+
     protected static function newFactory()
     {
         return TamborFactory::new();
