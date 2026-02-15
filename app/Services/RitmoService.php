@@ -14,7 +14,7 @@ class RitmoService
         private RitmoRepository $ritmoRepository
     ) {}
 
-    public function getAllForUser(User $user): array
+    public function getAllForUser(User $user)
     {
         if ($user->hasRole('admin')) {
             $ritmos = $this->ritmoRepository->getAll();
@@ -26,7 +26,7 @@ class RitmoService
             $ritmos = $this->ritmoRepository->getAprobados();
         }
 
-        return $ritmos->toArray();
+        return $ritmos;
     }
 
     public function create(array $data, User $user): Ritmo

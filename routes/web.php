@@ -25,7 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('tambores', TamborController::class);
+    Route::resource('tambores', TamborController::class)->parameters([
+        'tambores' => 'tambor'
+    ]);
     Route::resource('ritmos', RitmoController::class);
     Route::post('/ritmos/{ritmo}/approve', [RitmoController::class, 'approve'])->name('ritmos.approve');
 
