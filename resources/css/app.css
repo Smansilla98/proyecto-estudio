@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Clont Theme Styles */
+@import './clont-theme.css';
+

@@ -11,8 +11,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
+        // Obtener estadísticas
+        $ritmosCount = \App\Models\Ritmo::count();
+        $videosCount = \App\Models\Video::count();
+        $partiturasCount = \App\Models\Partitura::count();
+        $usersCount = \App\Models\User::count();
+
         return view('dashboard', [
             'user' => $user,
+            'ritmosCount' => $ritmosCount,
+            'videosCount' => $videosCount,
+            'partiturasCount' => $partiturasCount,
+            'usersCount' => $usersCount,
         ]);
     }
 }
