@@ -27,10 +27,20 @@ Route::middleware('auth')->group(function () {
     Route::resource('ritmos', RitmoController::class);
     Route::post('/ritmos/{ritmo}/approve', [RitmoController::class, 'approve'])->name('ritmos.approve');
 
+    // Videos
+    Route::get('/videos', function () {
+        $videos = \App\Models\Video::with(['ritmo', 'tambor'])->latest()->get();
+        return view('videos.index', compact('videos'));
+    })->name('videos.index');
     Route::post('/ritmos/{ritmo}/videos', [VideoController::class, 'store'])->name('videos.store');
     Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
     Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
 
+    // Partituras
+    Route::get('/partituras', function () {
+        $partituras = \App\Models\Partitura::with('ritmo')->latest()->get();
+        return view('partituras.index', compact('partituras'));
+    })->name('partituras.index');
     Route::post('/ritmos/{ritmo}/partituras', [PartituraController::class, 'store'])->name('partituras.store');
     Route::put('/partituras/{partitura}', [PartituraController::class, 'update'])->name('partituras.update');
     Route::delete('/partituras/{partitura}', [PartituraController::class, 'destroy'])->name('partituras.destroy');

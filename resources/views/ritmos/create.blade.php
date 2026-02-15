@@ -4,133 +4,90 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h2 class="card-title">
-            <i class="fas fa-plus-circle" style="margin-right: 10px; color: #6366f1;"></i>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">
+            <i class="bi bi-plus-circle me-2"></i>
             Crear Nuevo Ritmo
         </h2>
-        <a href="{{ route('ritmos.index') }}" class="btn" style="background: #6c757d; color: #fff;">
-            <i class="fas fa-arrow-left"></i>
+        <a href="{{ route('ritmos.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>
             Volver
         </a>
     </div>
-
-    <form action="{{ route('ritmos.store') }}" method="POST">
-        @csrf
-        
-        <div class="form-group">
-            <label for="nombre" class="form-label">
-                <i class="fas fa-heading" style="margin-right: 5px; color: #6366f1;"></i>
-                Nombre del Ritmo
-            </label>
-            <input 
-                type="text" 
-                name="nombre" 
-                id="nombre" 
-                required 
-                value="{{ old('nombre') }}" 
-                class="form-control"
-                placeholder="Ej: Samba, Bossa Nova, etc."
-            >
-            @error('nombre')
-                <div class="error-message" style="color: #ef4444; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="descripcion" class="form-label">
-                <i class="fas fa-align-left" style="margin-right: 5px; color: #6366f1;"></i>
-                Descripción
-            </label>
-            <textarea 
-                name="descripcion" 
-                id="descripcion" 
-                rows="4" 
-                class="form-control"
-                placeholder="Describe el ritmo, su origen, características, etc."
-            >{{ old('descripcion') }}</textarea>
-            @error('descripcion')
-                <div class="error-message" style="color: #ef4444; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="bpm_default" class="form-label">
-                <i class="fas fa-tachometer-alt" style="margin-right: 5px; color: #6366f1;"></i>
-                BPM por Defecto
-            </label>
-            <input 
-                type="number" 
-                name="bpm_default" 
-                id="bpm_default" 
-                required 
-                min="60" 
-                max="200" 
-                value="{{ old('bpm_default', 120) }}" 
-                class="form-control"
-                placeholder="120"
-            >
-            <small style="color: #6c757d; font-size: 12px; margin-top: 5px; display: block;">
-                Beats por minuto (rango: 60-200)
-            </small>
-            @error('bpm_default')
-                <div class="error-message" style="color: #ef4444; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">
-                <i class="fas fa-drum" style="margin-right: 5px; color: #6366f1;"></i>
-                Tambores
-            </label>
-            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8fafc;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
-                    @foreach($tambores as $tambor)
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; transition: all 0.3s ease;" 
-                               onmouseover="this.style.background='#fff'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';" 
-                               onmouseout="this.style.background='transparent'; this.style.boxShadow='none';">
-                            <input 
-                                type="checkbox" 
-                                name="tambores[]" 
-                                value="{{ $tambor->id }}" 
-                                style="width: 18px; height: 18px; cursor: pointer; accent-color: #6366f1;"
-                                {{ in_array($tambor->id, old('tambores', [])) ? 'checked' : '' }}
-                            >
-                            <span style="font-size: 14px; color: #495057;">
-                                <i class="fas fa-drum" style="margin-right: 5px; color: #6366f1;"></i>
-                                {{ $tambor->nombre }}
-                            </span>
-                        </label>
-                    @endforeach
-                </div>
+    <div class="card-body">
+        <form action="{{ route('ritmos.store') }}" method="POST">
+            @csrf
+            
+            <div class="mb-3">
+                <label for="nombre" class="form-label">
+                    <i class="bi bi-tag me-1"></i>
+                    Nombre del Ritmo
+                </label>
+                <input type="text" name="nombre" id="nombre" required value="{{ old('nombre') }}" class="form-control" placeholder="Ej: Samba, Bossa Nova, etc.">
+                @error('nombre')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
-            @error('tambores')
-                <div class="error-message" style="color: #ef4444; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-            <a href="{{ route('ritmos.index') }}" class="btn" style="background: #6c757d; color: #fff;">
-                <i class="fas fa-times"></i>
-                Cancelar
-            </a>
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i>
-                Crear Ritmo
-            </button>
-        </div>
-    </form>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">
+                    <i class="bi bi-text-paragraph me-1"></i>
+                    Descripción
+                </label>
+                <textarea name="descripcion" id="descripcion" rows="4" class="form-control" placeholder="Describe el ritmo, su origen, características, etc.">{{ old('descripcion') }}</textarea>
+                @error('descripcion')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="bpm_default" class="form-label">
+                    <i class="bi bi-speedometer2 me-1"></i>
+                    BPM por Defecto
+                </label>
+                <input type="number" name="bpm_default" id="bpm_default" required min="60" max="200" value="{{ old('bpm_default', 120) }}" class="form-control" placeholder="120">
+                <small class="text-muted">Beats por minuto (rango: 60-200)</small>
+                @error('bpm_default')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-drum me-1"></i>
+                    Tambores
+                </label>
+                <div class="border rounded p-3 bg-light">
+                    <div class="row g-2">
+                        @foreach($tambores as $tambor)
+                        <div class="col-md-4 col-sm-6">
+                            <div class="form-check p-2 border rounded">
+                                <input class="form-check-input" type="checkbox" name="tambores[]" value="{{ $tambor->id }}" id="tambor_{{ $tambor->id }}" {{ in_array($tambor->id, old('tambores', [])) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="tambor_{{ $tambor->id }}">
+                                    <i class="bi bi-drum me-1 text-primary"></i>
+                                    {{ $tambor->nombre }}
+                                </label>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @error('tambores')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ route('ritmos.index') }}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save me-2"></i>
+                    Crear Ritmo
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

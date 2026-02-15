@@ -129,10 +129,14 @@ php artisan migrate --force || {
     exit 1
 }
 
-# Ejecutar seeders (roles y permisos) solo si las tablas están vacías
+# Ejecutar seeders (roles, permisos y admin) solo si las tablas están vacías
 echo "Verificando seeders..."
 php artisan db:seed --class=RolePermissionSeeder --force || {
-    echo "⚠ Advertencia: No se pudieron ejecutar los seeders (puede que ya existan datos)"
+    echo "⚠ Advertencia: No se pudieron ejecutar los seeders de roles (puede que ya existan datos)"
+}
+
+php artisan db:seed --class=AdminUserSeeder --force || {
+    echo "⚠ Advertencia: No se pudo crear el usuario admin (puede que ya exista)"
 }
 
 # Iniciar el servidor

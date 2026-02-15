@@ -792,14 +792,14 @@
             </a>
             
             @can('viewAny', App\Models\Video::class)
-            <a href="#" class="nova-nav-item">
+            <a href="{{ route('videos.index') }}" class="nova-nav-item {{ request()->routeIs('videos.*') ? 'active' : '' }}">
                 <i class="bi bi-play-circle"></i>
                 <span>Videos</span>
             </a>
             @endcan
             
             @can('viewAny', App\Models\Partitura::class)
-            <a href="#" class="nova-nav-item">
+            <a href="{{ route('partituras.index') }}" class="nova-nav-item {{ request()->routeIs('partituras.*') ? 'active' : '' }}">
                 <i class="bi bi-file-earmark-music"></i>
                 <span>Partituras</span>
             </a>
