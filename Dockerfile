@@ -14,6 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Instalar Node.js (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -28,8 +34,13 @@ COPY composer.json ./
 # Si composer.lock no existe, composer lo generará automáticamente
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# Copiar el resto de los archivos de la aplicación
+# Copiar el resto de los archivos de la aplicación (necesarios para compilar assets)
 COPY . .
+
+# Instalar dependencias de Node.js y compilar assets de Vite
+RUN npm ci || npm install \
+    && npm run build \
+    && rm -rf node_modules
 
 # Crear directorios necesarios y configurar permisos antes de ejecutar composer
 RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
