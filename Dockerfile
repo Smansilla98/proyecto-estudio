@@ -43,9 +43,17 @@ RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer dump-autoload --optimize
 
+# Copiar script de inicio
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Variables de entorno para el servidor
+ENV PORT=8000
+ENV HOST=0.0.0.0
+
 # Exponer puerto
 EXPOSE 8000
 
-# Comando para iniciar la aplicación
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Usar script de inicio
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
