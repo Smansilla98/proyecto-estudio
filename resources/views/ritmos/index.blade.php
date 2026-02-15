@@ -9,13 +9,13 @@
             <i class="bi bi-music-note-list me-2"></i>
             Programa de Ritmos - La Chilinga
         </h2>
-        @can('create', App\Models\Ritmo::class)
+            @can('create', App\Models\Ritmo::class)
         <a href="{{ route('ritmos.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i>
-            Crear Ritmo
-        </a>
-        @endcan
-    </div>
+                    Crear Ritmo
+                </a>
+            @endcan
+        </div>
 
     <div class="card-body">
         @php
@@ -101,8 +101,8 @@
                                         <i class="bi bi-check-circle me-1"></i>
                                         Aprobado
                                     </span>
-                                    @endif
-                                </div>
+                            @endif
+                        </div>
 
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('ritmos.show', $ritmo) }}" class="btn btn-primary btn-sm flex-fill">
@@ -119,10 +119,10 @@
                         </div>
                     </div>
                     @endforeach
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        @empty
+            @empty
         <div class="text-center py-5">
             <i class="bi bi-music-note-list" style="font-size: 64px; color: #cfcecd; margin-bottom: 20px;"></i>
             <h3 class="h5 text-muted mb-2">No hay ritmos disponibles</h3>

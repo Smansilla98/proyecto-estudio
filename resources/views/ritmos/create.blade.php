@@ -15,8 +15,8 @@
         </a>
     </div>
     <div class="card-body">
-        <form action="{{ route('ritmos.store') }}" method="POST">
-            @csrf
+                <form action="{{ route('ritmos.store') }}" method="POST">
+                    @csrf
             
             <div class="mb-3">
                 <label for="nombre" class="form-label">
@@ -24,7 +24,7 @@
                     Nombre del Ritmo
                 </label>
                 <input type="text" name="nombre" id="nombre" required value="{{ old('nombre') }}" class="form-control" placeholder="Ej: Samba, Bossa Nova, etc.">
-                @error('nombre')
+                            @error('nombre')
                 <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror
             </div>
@@ -46,8 +46,8 @@
                     </select>
                     @error('anio')
                     <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+                            @enderror
+                        </div>
 
                 <div class="col-md-6 mb-3">
                     <label for="tipo" class="form-label">
@@ -75,8 +75,8 @@
                     <input type="text" name="autor" id="autor" value="{{ old('autor') }}" class="form-control" placeholder="Ej: D. Buira, Ritmo Popular de Brasil, etc.">
                     @error('autor')
                     <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+                            @enderror
+                        </div>
 
                 <div class="col-md-6 mb-3">
                     <label for="bpm_default" class="form-label">
@@ -85,7 +85,7 @@
                     </label>
                     <input type="number" name="bpm_default" id="bpm_default" required min="60" max="200" value="{{ old('bpm_default', 120) }}" class="form-control" placeholder="120">
                     <small class="text-muted">Beats por minuto (rango: 60-200)</small>
-                    @error('bpm_default')
+                            @error('bpm_default')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -124,8 +124,8 @@
                 <textarea name="descripcion" id="descripcion" rows="4" class="form-control" placeholder="Describe el ritmo, su origen, características, etc.">{{ old('descripcion') }}</textarea>
                 @error('descripcion')
                 <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
+                            @enderror
+                        </div>
 
             <div class="mb-4">
                 <label class="form-label">
@@ -134,35 +134,35 @@
                 </label>
                 <div class="border rounded p-3 bg-light">
                     <div class="row g-2">
-                        @foreach($tambores as $tambor)
+                                @foreach($tambores as $tambor)
                         <div class="col-md-4 col-sm-6">
                             <div class="form-check p-2 border rounded">
                                 <input class="form-check-input" type="checkbox" name="tambores[]" value="{{ $tambor->id }}" id="tambor_{{ $tambor->id }}" {{ in_array($tambor->id, old('tambores', [])) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="tambor_{{ $tambor->id }}">
                                     <i class="bi bi-drum me-1 text-primary"></i>
                                     {{ $tambor->nombre }}
-                                </label>
+                                    </label>
                             </div>
                         </div>
                         @endforeach
                     </div>
                 </div>
-                @error('tambores')
+                            @error('tambores')
                 <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
+                            @enderror
+                        </div>
 
             <div class="d-flex justify-content-end gap-2">
                 <a href="{{ route('ritmos.index') }}" class="btn btn-secondary">
                     <i class="bi bi-x-circle me-2"></i>
-                    Cancelar
-                </a>
+                                Cancelar
+                            </a>
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-save me-2"></i>
-                    Crear Ritmo
-                </button>
-            </div>
-        </form>
+                                Crear Ritmo
+                            </button>
+                    </div>
+                </form>
     </div>
 </div>
 

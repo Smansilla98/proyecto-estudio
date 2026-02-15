@@ -165,7 +165,7 @@
             @endif
 
             <form action="{{ route('login') }}" method="POST">
-                @csrf
+            @csrf
                 
                 <div class="form-group">
                     <label for="email" class="form-label">
@@ -218,7 +218,7 @@
                     <a href="#" style="color: #6366f1; text-decoration: none; font-size: 14px;">
                         ¿Olvidaste tu contraseña?
                     </a>
-                </div>
+            </div>
 
                 <button type="submit" class="btn-login">
                     <i class="fas fa-sign-in-alt"></i>

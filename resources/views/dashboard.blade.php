@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-    </div>
+                </div>
 
     <div class="col-md-6 col-lg-3">
         <div class="card">

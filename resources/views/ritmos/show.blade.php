@@ -6,7 +6,7 @@
 <!-- Header del Ritmo -->
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <div>
+                    <div>
             <h1 class="h3 mb-1">
                 <i class="bi bi-music-note-beamed me-2"></i>
                 {{ $ritmo->nombre }}
@@ -40,30 +40,30 @@
             </p>
             @endif
             <p class="text-muted mb-0">{{ $ritmo->descripcion }}</p>
-        </div>
+                    </div>
         <div class="d-flex gap-2">
-            @can('update', $ritmo)
+                        @can('update', $ritmo)
             <a href="{{ route('ritmos.edit', $ritmo) }}" class="btn btn-success">
                 <i class="bi bi-pencil me-2"></i>
-                Editar
-            </a>
-            @endcan
-            @can('approve', $ritmo)
-            @if(!$ritmo->approved)
-            <form action="{{ route('ritmos.approve', $ritmo) }}" method="POST">
-                @csrf
+                                Editar
+                            </a>
+                        @endcan
+                        @can('approve', $ritmo)
+                            @if(!$ritmo->approved)
+                                <form action="{{ route('ritmos.approve', $ritmo) }}" method="POST">
+                                    @csrf
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-check-circle me-2"></i>
-                    Aprobar
-                </button>
-            </form>
+                                        Aprobar
+                                    </button>
+                                </form>
             @else
             <span class="badge bg-success">
                 <i class="bi bi-check-circle me-1"></i>
                 Aprobado
             </span>
-            @endif
-            @endcan
+                            @endif
+                        @endcan
             <a href="{{ route('ritmos.index') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-2"></i>
                 Volver
@@ -99,11 +99,11 @@
                     </div>
                 </div>
             </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- Tambores -->
+        <!-- Tambores -->
 <div class="card mb-4">
     <div class="card-header">
         <h2 class="card-title mb-0">
@@ -114,12 +114,12 @@
     <div class="card-body">
         @if($ritmo->tambores->count() > 0)
         <div class="d-flex flex-wrap gap-2">
-            @foreach($ritmo->tambores as $tambor)
+                    @foreach($ritmo->tambores as $tambor)
             <span class="badge bg-primary fs-6 px-3 py-2">
                 <i class="bi bi-drum me-1"></i>
-                {{ $tambor->nombre }}
-            </span>
-            @endforeach
+                            {{ $tambor->nombre }}
+                        </span>
+                    @endforeach
         </div>
         @else
         <p class="text-muted mb-0">No hay tambores asignados a este ritmo.</p>
@@ -256,14 +256,14 @@
                 @endforeach
             </div>
         </div>
-        
+
         <!-- Reproductor de Videos -->
-        <div id="video-player-container" data-ritmo-id="{{ $ritmo->id }}" data-bpm="{{ $ritmo->bpm_default }}">
-            @include('ritmos.video-player', ['ritmo' => $ritmo])
-        </div>
-    </div>
-</div>
-@endif
+                    <div id="video-player-container" data-ritmo-id="{{ $ritmo->id }}" data-bpm="{{ $ritmo->bpm_default }}">
+                        @include('ritmos.video-player', ['ritmo' => $ritmo])
+                    </div>
+                </div>
+            </div>
+        @endif
 
 <!-- Agregar Video -->
 @can('create', App\Models\Video::class)
@@ -273,37 +273,37 @@
             <i class="bi bi-plus-circle me-2"></i>
             Agregar Video
         </h2>
-    </div>
+                            </div>
     <div class="card-body">
-        <form action="{{ route('videos.store', $ritmo) }}" method="POST" enctype="multipart/form-data">
-            @csrf
+                    <form action="{{ route('videos.store', $ritmo) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="tambor_id" class="form-label">Tambor</label>
                     <select name="tambor_id" id="tambor_id" required class="form-select">
                         <option value="">Seleccione un tambor</option>
-                        @foreach($ritmo->tambores as $tambor)
-                        <option value="{{ $tambor->id }}">{{ $tambor->nombre }}</option>
-                        @endforeach
-                    </select>
+                                    @foreach($ritmo->tambores as $tambor)
+                                        <option value="{{ $tambor->id }}">{{ $tambor->nombre }}</option>
+                                    @endforeach
+                                </select>
                     @error('tambor_id')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
-                </div>
+                            </div>
                 <div class="col-md-6">
                     <label for="orden_ejecucion" class="form-label">Orden de Ejecución</label>
                     <input type="number" name="orden_ejecucion" id="orden_ejecucion" value="0" required min="0" class="form-control">
                     @error('orden_ejecucion')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
-                </div>
+                            </div>
                 <div class="col-md-6">
                     <label for="url_video" class="form-label">URL del Video (opcional)</label>
                     <input type="url" name="url_video" id="url_video" class="form-control" placeholder="https://...">
                     @error('url_video')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
-                </div>
+                            </div>
                 <div class="col-md-6">
                     <label for="video_file" class="form-label">Archivo de Video (opcional)</label>
                     <input type="file" name="video_file" id="video_file" accept="video/*" class="form-control">
@@ -311,18 +311,18 @@
                     @error('video_file')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
-                </div>
+                            </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-2"></i>
-                        Agregar Video
-                    </button>
+                                Agregar Video
+                            </button>
+                        </div>
+            </div>
+                    </form>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
-@endcan
+        @endcan
 
 <!-- Partituras -->
 @if($ritmo->partituras->count() > 0)
@@ -354,7 +354,7 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta partitura?')">
                             <i class="bi bi-trash"></i>
-                        </button>
+                            </button>
                     </form>
                     @endcan
                 </div>

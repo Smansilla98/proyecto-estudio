@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $tambore->nombre)
+@section('title', $tambor->nombre)
 
 @section('content')
 <!-- Header del Tambor -->
@@ -9,13 +9,13 @@
         <div>
             <h1 class="h3 mb-1">
                 <i class="bi bi-drum me-2"></i>
-                {{ $tambore->nombre }}
+                {{ $tambor->nombre }}
             </h1>
-            <p class="text-muted mb-0">{{ $tambore->descripcion ?? 'Sin descripción' }}</p>
+            <p class="text-muted mb-0">{{ $tambor->descripcion ?? 'Sin descripción' }}</p>
         </div>
         <div class="d-flex gap-2">
-            @can('update', $tambore)
-            <a href="{{ route('tambores.edit', $tambore) }}" class="btn btn-success">
+            @can('update', $tambor)
+            <a href="{{ route('tambores.edit', $tambor) }}" class="btn btn-success">
                 <i class="bi bi-pencil me-2"></i>
                 Editar
             </a>
@@ -33,7 +33,7 @@
                     <i class="bi bi-music-note-list text-primary fs-5"></i>
                     <div>
                         <small class="text-muted d-block">Ritmos</small>
-                        <strong>{{ $tambore->ritmos->count() }}</strong>
+                        <strong>{{ $tambor->ritmos->count() }}</strong>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <i class="bi bi-play-circle text-primary fs-5"></i>
                     <div>
                         <small class="text-muted d-block">Videos</small>
-                        <strong>{{ $tambore->videos->count() }}</strong>
+                        <strong>{{ $tambor->videos->count() }}</strong>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <i class="bi bi-calendar text-primary fs-5"></i>
                     <div>
                         <small class="text-muted d-block">Fecha</small>
-                        <strong>{{ $tambore->created_at->format('d/m/Y') }}</strong>
+                        <strong>{{ $tambor->created_at->format('d/m/Y') }}</strong>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 </div>
 
 <!-- Ritmos que usan este tambor -->
-@if($tambore->ritmos->count() > 0)
+@if($tambor->ritmos->count() > 0)
 <div class="card mb-4">
     <div class="card-header">
         <h2 class="card-title mb-0">
@@ -70,7 +70,7 @@
     </div>
     <div class="card-body">
         <div class="list-group">
-            @foreach($tambore->ritmos as $ritmo)
+            @foreach($tambor->ritmos as $ritmo)
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <i class="bi bi-music-note-beamed text-primary me-2"></i>
@@ -91,7 +91,7 @@
 @endif
 
 <!-- Videos de este tambor -->
-@if($tambore->videos->count() > 0)
+@if($tambor->videos->count() > 0)
 <div class="card">
     <div class="card-header">
         <h2 class="card-title mb-0">
@@ -101,7 +101,7 @@
     </div>
     <div class="card-body">
         <div class="list-group">
-            @foreach($tambore->videos as $video)
+            @foreach($tambor->videos as $video)
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <i class="bi bi-play-circle text-primary me-2"></i>

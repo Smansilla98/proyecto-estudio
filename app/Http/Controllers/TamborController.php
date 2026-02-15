@@ -35,44 +35,44 @@ class TamborController extends Controller
             ->with('success', 'Tambor creado exitosamente.');
     }
 
-    public function show(Tambor $tambore)
+    public function show(Tambor $tambor)
     {
-        $tambore->load(['ritmos', 'videos.ritmo']);
-        return view('tambores.show', compact('tambore'));
+        $tambor->load(['ritmos', 'videos.ritmo']);
+        return view('tambores.show', compact('tambor'));
     }
 
-    public function edit(Tambor $tambore)
+    public function edit(Tambor $tambor)
     {
-        Gate::authorize('update', $tambore);
-        return view('tambores.edit', compact('tambore'));
+        Gate::authorize('update', $tambor);
+        return view('tambores.edit', compact('tambor'));
     }
 
-    public function update(Request $request, Tambor $tambore)
+    public function update(Request $request, Tambor $tambor)
     {
-        Gate::authorize('update', $tambore);
+        Gate::authorize('update', $tambor);
 
         $validated = $request->validate([
-            'nombre' => ['required', 'string', 'max:255', 'unique:tambores,nombre,' . $tambore->id],
+            'nombre' => ['required', 'string', 'max:255', 'unique:tambores,nombre,' . $tambor->id],
             'descripcion' => ['nullable', 'string'],
         ]);
 
-        $tambore->update($validated);
+        $tambor->update($validated);
 
-        return redirect()->route('tambores.show', $tambore)
+        return redirect()->route('tambores.show', $tambor)
             ->with('success', 'Tambor actualizado exitosamente.');
     }
 
-    public function destroy(Tambor $tambore)
+    public function destroy(Tambor $tambor)
     {
-        Gate::authorize('delete', $tambore);
+        Gate::authorize('delete', $tambor);
 
         // Verificar si tiene relaciones
-        if ($tambore->ritmos()->count() > 0 || $tambore->videos()->count() > 0) {
+        if ($tambor->ritmos()->count() > 0 || $tambor->videos()->count() > 0) {
             return redirect()->back()
                 ->with('error', 'No se puede eliminar el tambor porque tiene ritmos o videos asociados.');
         }
 
-        $tambore->delete();
+        $tambor->delete();
 
         return redirect()->route('tambores.index')
             ->with('success', 'Tambor eliminado exitosamente.');
