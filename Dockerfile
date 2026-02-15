@@ -31,13 +31,17 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 # Copiar el resto de los archivos de la aplicación
 COPY . .
 
-# Ejecutar scripts de composer si es necesario
-RUN composer dump-autoload --optimize
+# Crear directorios necesarios y configurar permisos antes de ejecutar composer
+RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
+    && mkdir -p /var/www/html/storage/logs \
+    && mkdir -p /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Configurar permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+# Configurar variable de entorno para composer y ejecutar scripts
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer dump-autoload --optimize
 
 # Exponer puerto
 EXPOSE 8000
