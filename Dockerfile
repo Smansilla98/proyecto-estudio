@@ -21,9 +21,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copiar solo archivos necesarios para composer (optimización de cache)
-COPY composer.json composer.lock ./
+# Nota: composer.lock puede no existir en proyectos nuevos, se generará durante install
+COPY composer.json ./
 
 # Instalar dependencias de Composer (esta capa se cachea si no cambian los archivos)
+# Si composer.lock no existe, composer lo generará automáticamente
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Copiar el resto de los archivos de la aplicación
@@ -41,5 +43,5 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE 8000
 
 # Comando para iniciar la aplicación
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 
