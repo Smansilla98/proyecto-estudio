@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Iniciar Sesión - {{ config('app.name', 'Escuela de Tambores') }}</title>
+    <title>Registro - {{ config('app.name', 'Escuela de Tambores') }}</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -26,7 +26,7 @@
             justify-content: center;
             font-family: 'Roboto', 'Nunito', sans-serif;
         }
-        .login-container {
+        .register-container {
             background: #fff;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -35,7 +35,7 @@
             width: 100%;
             margin: 20px;
         }
-        .login-left {
+        .register-left {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             padding: 60px 40px;
             color: #fff;
@@ -45,34 +45,50 @@
             align-items: center;
             text-align: center;
         }
-        .login-left i {
+        .register-left i {
             font-size: 80px;
             margin-bottom: 30px;
             opacity: 0.9;
         }
-        .login-left h1 {
+        .register-left h1 {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 15px;
         }
-        .login-left p {
+        .register-left p {
             font-size: 16px;
             opacity: 0.9;
             line-height: 1.6;
+            margin-bottom: 30px;
         }
-        .login-right {
+        .register-left .features {
+            text-align: left;
+            width: 100%;
+        }
+        .register-left .features div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .register-left .features i {
+            font-size: 18px;
+            width: 20px;
+        }
+        .register-right {
             padding: 60px 50px;
         }
-        .login-header {
+        .register-header {
             margin-bottom: 40px;
         }
-        .login-header h2 {
+        .register-header h2 {
             font-size: 28px;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 10px;
         }
-        .login-header p {
+        .register-header p {
             color: #6c757d;
             font-size: 14px;
         }
@@ -99,7 +115,7 @@
             border-color: #6366f1;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
-        .btn-login {
+        .btn-register {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -115,7 +131,7 @@
             justify-content: center;
             gap: 10px;
         }
-        .btn-login:hover {
+        .btn-register:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
@@ -127,46 +143,102 @@
             align-items: center;
             gap: 5px;
         }
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .login-link a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .login-link a:hover {
+            color: #4f46e5;
+        }
         @media (max-width: 768px) {
-            .login-container {
+            .register-container {
                 flex-direction: column;
             }
-            .login-left {
+            .register-left {
                 padding: 40px 30px;
             }
-            .login-right {
+            .register-right {
                 padding: 40px 30px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container" style="display: grid; grid-template-columns: 1fr;">
-        <div class="login-left">
+    <div class="register-container" style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div class="register-left">
             <i class="fas fa-drum"></i>
-            <h1>Escuela de Tambores</h1>
-            <p>Plataforma de aprendizaje para dominar el arte de la percusión</p>
+            <h1>Únete a Nosotros</h1>
+            <p>Crea tu cuenta y comienza tu viaje musical</p>
+            <div class="features">
+                <div>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Acceso a todos los ritmos</span>
+                </div>
+                <div>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Videos tutoriales exclusivos</span>
+                </div>
+                <div>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Partituras descargables</span>
+                </div>
+                <div>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Comunidad de músicos</span>
+                </div>
+            </div>
         </div>
         
-        <div class="login-right">
-            <div class="login-header">
+        <div class="register-right">
+            <div class="register-header">
                 <h2>
-                    <i class="fas fa-sign-in-alt" style="color: #6366f1; margin-right: 10px;"></i>
-                    Iniciar Sesión
+                    <i class="fas fa-user-plus" style="color: #6366f1; margin-right: 10px;"></i>
+                    Crear Cuenta
                 </h2>
-                <p>Ingresa tus credenciales para acceder a tu cuenta</p>
+                <p>Completa el formulario para registrarte</p>
             </div>
 
             @if($errors->any())
-            <div class="alert alert-danger" style="margin-bottom: 25px;">
+            <div class="alert alert-danger" style="margin-bottom: 25px; padding: 15px 20px; background: #fee2e2; color: #991b1b; border-radius: 8px; border-left: 4px solid #ef4444;">
                 <i class="fas fa-exclamation-circle"></i>
                 <span>{{ $errors->first() }}</span>
             </div>
             @endif
 
-            <form action="{{ route('login') }}" method="POST">
+            <form action="{{ route('register') }}" method="POST">
                 @csrf
                 
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        <i class="fas fa-user" style="margin-right: 5px; color: #6366f1;"></i>
+                        Nombre Completo
+                    </label>
+                    <input 
+                        id="name" 
+                        name="name" 
+                        type="text" 
+                        required 
+                        class="form-control" 
+                        placeholder="Juan Pérez"
+                        value="{{ old('name') }}"
+                        autofocus
+                    >
+                    @error('name')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope" style="margin-right: 5px; color: #6366f1;"></i>
@@ -202,6 +274,9 @@
                         class="form-control" 
                         placeholder="••••••••"
                     >
+                    <small style="color: #6c757d; font-size: 12px; margin-top: 5px; display: block;">
+                        Mínimo 8 caracteres
+                    </small>
                     @error('password')
                         <div class="error-message">
                             <i class="fas fa-exclamation-circle"></i>
@@ -210,28 +285,39 @@
                     @enderror
                 </div>
 
-                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #6c757d;">
-                        <input type="checkbox" name="remember" style="cursor: pointer;">
-                        <span>Recordarme</span>
+                <div class="form-group">
+                    <label for="password_confirmation" class="form-label">
+                        <i class="fas fa-lock" style="margin-right: 5px; color: #6366f1;"></i>
+                        Confirmar Contraseña
                     </label>
-                    <a href="#" style="color: #6366f1; text-decoration: none; font-size: 14px;">
-                        ¿Olvidaste tu contraseña?
-                    </a>
+                    <input 
+                        id="password_confirmation" 
+                        name="password_confirmation" 
+                        type="password" 
+                        required 
+                        class="form-control" 
+                        placeholder="••••••••"
+                    >
+                    @error('password_confirmation')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
-                <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Iniciar Sesión
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i>
+                    Crear Cuenta
                 </button>
             </form>
 
-            <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #e0e0e0;">
+            <div class="login-link">
                 <p style="color: #6c757d; font-size: 14px; margin: 0;">
-                    ¿No tienes una cuenta? 
-                    <a href="{{ route('register') }}" style="color: #6366f1; text-decoration: none; font-weight: 500;">
-                        <i class="fas fa-user-plus" style="margin-right: 5px;"></i>
-                        Regístrate aquí
+                    ¿Ya tienes una cuenta? 
+                    <a href="{{ route('login') }}">
+                        <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i>
+                        Inicia sesión aquí
                     </a>
                 </p>
             </div>
@@ -239,3 +325,4 @@
     </div>
 </body>
 </html>
+
