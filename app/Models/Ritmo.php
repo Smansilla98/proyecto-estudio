@@ -21,11 +21,18 @@ class Ritmo extends Model
         'bpm_default',
         'created_by',
         'approved',
+        'anio',
+        'autor',
+        'tipo',
+        'opcional',
+        'anio_opcional',
     ];
 
     protected $casts = [
         'approved' => 'boolean',
         'bpm_default' => 'integer',
+        'anio' => 'integer',
+        'opcional' => 'boolean',
     ];
 
     public function creador()

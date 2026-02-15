@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             TamboresSeeder::class,
             UsersSeeder::class,
-            RitmosSeeder::class,
+            ChilingaRitmosSeeder::class, // Seeder con ritmos oficiales de La Chilinga
+            RitmosSeeder::class, // Seeder de ejemplo (opcional)
         ]);
     }
 }

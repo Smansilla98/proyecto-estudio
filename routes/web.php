@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RitmoController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\PartituraController;
+use App\Http\Controllers\TamborController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('tambores', TamborController::class);
     Route::resource('ritmos', RitmoController::class);
     Route::post('/ritmos/{ritmo}/approve', [RitmoController::class, 'approve'])->name('ritmos.approve');
 

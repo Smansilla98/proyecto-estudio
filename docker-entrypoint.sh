@@ -139,6 +139,10 @@ php artisan db:seed --class=AdminUserSeeder --force || {
     echo "⚠ Advertencia: No se pudo crear el usuario admin (puede que ya exista)"
 }
 
+php artisan db:seed --class=ChilingaRitmosSeeder --force || {
+    echo "⚠ Advertencia: No se pudieron crear los ritmos de La Chilinga (puede que ya existan)"
+}
+
 # Iniciar el servidor
 echo "Iniciando servidor en ${HOST}:${PORT}..."
 exec php artisan serve --host="${HOST}" --port="${PORT}"

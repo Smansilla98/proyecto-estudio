@@ -7,7 +7,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h2 class="card-title mb-0">
             <i class="bi bi-music-note-list me-2"></i>
-            Lista de Ritmos
+            Programa de Ritmos - La Chilinga
         </h2>
         @can('create', App\Models\Ritmo::class)
         <a href="{{ route('ritmos.create') }}" class="btn btn-primary">
@@ -18,50 +18,107 @@
     </div>
 
     <div class="card-body">
-        @forelse($ritmos as $ritmo)
-        <div class="card mb-3">
+        @php
+            // Organizar ritmos por año
+            $ritmosPorAnio = [];
+            foreach ($ritmos as $ritmo) {
+                $anio = $ritmo['anio'] ?? 'Sin año';
+                if (!isset($ritmosPorAnio[$anio])) {
+                    $ritmosPorAnio[$anio] = [];
+                }
+                $ritmosPorAnio[$anio][] = $ritmo;
+            }
+            ksort($ritmosPorAnio);
+        @endphp
+
+        @forelse($ritmosPorAnio as $anio => $ritmosAnio)
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="h5 mb-0">
+                    <i class="bi bi-calendar3 me-2"></i>
+                    @if($anio == 'Sin año')
+                        Ritmos sin Año Asignado
+                    @else
+                        {{ $anio == 1 ? '1er' : ($anio == 2 ? '2do' : ($anio == 3 ? '3er' : ($anio == 4 ? '4to' : ($anio == 5 ? '5to' : ($anio == 6 ? '6to' : $anio))))) }} Año
+                    @endif
+                    <span class="badge bg-light text-primary ms-2">{{ count($ritmosAnio) }} ritmos</span>
+                </h3>
+            </div>
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="flex-grow-1">
-                        <h3 class="h5 mb-2">
-                            <i class="bi bi-drum me-2 text-primary"></i>
-                            {{ $ritmo['nombre'] }}
-                        </h3>
-                        <p class="text-muted mb-3">
-                            {{ $ritmo['descripcion'] ?? 'Sin descripción' }}
-                        </p>
-                        <div class="d-flex gap-3 flex-wrap align-items-center">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="bi bi-speedometer2 text-primary"></i>
-                                <span class="text-muted">
-                                    <strong>BPM:</strong> {{ $ritmo['bpm_default'] }}
-                                </span>
+                <div class="row g-3">
+                    @foreach($ritmosAnio as $ritmo)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-music-note-beamed me-2 text-primary"></i>
+                                    {{ $ritmo['nombre'] }}
+                                </h5>
+                                
+                                @if(isset($ritmo['tipo']) || isset($ritmo['autor']))
+                                <div class="mb-2">
+                                    @if(isset($ritmo['tipo']))
+                                    <span class="badge bg-info me-1">
+                                        {{ $ritmo['tipo'] }}
+                                    </span>
+                                    @endif
+                                    @if(isset($ritmo['autor']))
+                                    <small class="text-muted d-block mt-1">
+                                        <i class="bi bi-person me-1"></i>
+                                        {{ $ritmo['autor'] }}
+                                    </small>
+                                    @endif
+                                    @if(isset($ritmo['opcional']) && $ritmo['opcional'])
+                                    <span class="badge bg-warning mt-1">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Opcional
+                                        @if(isset($ritmo['anio_opcional']))
+                                        ({{ $ritmo['anio_opcional'] }})
+                                        @endif
+                                    </span>
+                                    @endif
+                                </div>
+                                @endif
+
+                                @if(isset($ritmo['descripcion']) && $ritmo['descripcion'])
+                                <p class="card-text text-muted small mb-2">
+                                    {{ Str::limit($ritmo['descripcion'], 80) }}
+                                </p>
+                                @endif
+
+                                <div class="d-flex gap-2 align-items-center mb-2">
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-speedometer2 me-1"></i>
+                                        BPM: {{ $ritmo['bpm_default'] ?? 120 }}
+                                    </span>
+                                    @if(!($ritmo['approved'] ?? false))
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-clock me-1"></i>
+                                        Pendiente
+                                    </span>
+                                    @else
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Aprobado
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('ritmos.show', $ritmo['id']) }}" class="btn btn-primary btn-sm flex-fill">
+                                        <i class="bi bi-eye me-1"></i>
+                                        Ver
+                                    </a>
+                                    @can('update', App\Models\Ritmo::class)
+                                    <a href="{{ route('ritmos.edit', $ritmo['id']) }}" class="btn btn-success btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    @endcan
+                                </div>
                             </div>
-                            @if(!$ritmo['approved'])
-                            <span class="badge bg-warning">
-                                <i class="bi bi-clock me-1"></i>
-                                Pendiente de Aprobación
-                            </span>
-                            @else
-                            <span class="badge bg-success">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Aprobado
-                            </span>
-                            @endif
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('ritmos.show', $ritmo['id']) }}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-eye me-1"></i>
-                            Ver
-                        </a>
-                        @can('update', App\Models\Ritmo::class)
-                        <a href="{{ route('ritmos.edit', $ritmo['id']) }}" class="btn btn-success btn-sm">
-                            <i class="bi bi-pencil me-1"></i>
-                            Editar
-                        </a>
-                        @endcan
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

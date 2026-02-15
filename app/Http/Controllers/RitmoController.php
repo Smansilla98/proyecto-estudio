@@ -45,9 +45,17 @@ class RitmoController extends Controller
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'bpm_default' => ['required', 'integer', 'min:60', 'max:200'],
+            'anio' => ['nullable', 'integer', 'min:1', 'max:6'],
+            'autor' => ['nullable', 'string', 'max:255'],
+            'tipo' => ['nullable', 'string', 'in:Autor,Ritmo Popular,Adaptación'],
+            'opcional' => ['nullable', 'boolean'],
+            'anio_opcional' => ['nullable', 'string', 'max:255'],
             'tambores' => ['required', 'array', 'min:1'],
             'tambores.*' => ['exists:tambores,id'],
         ]);
+
+        // Convertir opcional a boolean
+        $validated['opcional'] = $request->has('opcional') && $request->input('opcional') == '1';
 
         $ritmo = $this->ritmoService->create($validated, Auth::user());
 
@@ -72,9 +80,17 @@ class RitmoController extends Controller
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'bpm_default' => ['required', 'integer', 'min:60', 'max:200'],
+            'anio' => ['nullable', 'integer', 'min:1', 'max:6'],
+            'autor' => ['nullable', 'string', 'max:255'],
+            'tipo' => ['nullable', 'string', 'in:Autor,Ritmo Popular,Adaptación'],
+            'opcional' => ['nullable', 'boolean'],
+            'anio_opcional' => ['nullable', 'string', 'max:255'],
             'tambores' => ['required', 'array', 'min:1'],
             'tambores.*' => ['exists:tambores,id'],
         ]);
+
+        // Convertir opcional a boolean
+        $validated['opcional'] = $request->has('opcional') && $request->input('opcional') == '1';
 
         $this->ritmoService->update($ritmo, $validated, Auth::user());
 

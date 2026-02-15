@@ -786,6 +786,11 @@
                 <span>Dashboard</span>
             </a>
             
+            <a href="{{ route('tambores.index') }}" class="nova-nav-item {{ request()->routeIs('tambores.*') ? 'active' : '' }}">
+                <i class="bi bi-drum"></i>
+                <span>Tambores</span>
+            </a>
+            
             <a href="{{ route('ritmos.index') }}" class="nova-nav-item {{ request()->routeIs('ritmos.*') ? 'active' : '' }}">
                 <i class="bi bi-music-note-list"></i>
                 <span>Ritmos</span>
