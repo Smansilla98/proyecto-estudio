@@ -307,7 +307,7 @@
                 <div class="col-md-6">
                     <label for="video_file" class="form-label">Archivo de Video (opcional)</label>
                     <input type="file" name="video_file" id="video_file" accept="video/*" class="form-control">
-                    <small class="text-muted">Formatos: MP4, WebM, OGG (máx. 100MB)</small>
+                    <small class="text-muted">Formatos: MP4, WebM, OGG (máx. 200MB)</small>
                     @error('video_file')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
@@ -385,7 +385,7 @@
             <div class="mb-3">
                 <label for="archivo_pdf" class="form-label">Archivo PDF</label>
                 <input type="file" name="archivo_pdf" id="archivo_pdf" accept=".pdf" required class="form-control">
-                <small class="text-muted">Formato: PDF (máx. 10MB)</small>
+                <small class="text-muted">Formato: PDF (máx. 100MB)</small>
                 @error('archivo_pdf')
                 <div class="text-danger small mt-1">{{ $message }}</div>
                 @enderror

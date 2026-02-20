@@ -20,40 +20,61 @@ class PartituraController extends Controller
 
         // Verificar que el archivo esté presente en la solicitud
         if (!$request->hasFile('archivo_pdf')) {
+            // Verificar si el problema es que el formulario no tiene enctype
+            if ($request->has('archivo_pdf') && $request->input('archivo_pdf') === null) {
+                return redirect()->back()
+                    ->withErrors(['archivo_pdf' => 'No se pudo obtener el archivo. Verifique que el formulario tenga enctype="multipart/form-data".'])
+                    ->withInput();
+            }
+            
             return redirect()->back()
                 ->withErrors(['archivo_pdf' => 'Debe seleccionar un archivo PDF para subir.'])
                 ->withInput();
         }
 
-        // Validar el archivo con mensajes personalizados
-        $validated = $request->validate([
-            'archivo_pdf' => [
-                'required',
-                'file',
-                'mimes:pdf',
-                'max:10240', // 10MB en kilobytes
-            ],
-        ], [
-            'archivo_pdf.required' => 'Debe seleccionar un archivo PDF.',
-            'archivo_pdf.file' => 'El archivo debe ser un archivo válido.',
-            'archivo_pdf.mimes' => 'El archivo debe ser un PDF (formato .pdf).',
-            'archivo_pdf.max' => 'El archivo no debe ser mayor a 10MB. Verifique la configuración de PHP (upload_max_filesize y post_max_size).',
-        ]);
-
-        // Obtener el archivo
+        // Obtener el archivo antes de validar
         $archivo = $request->file('archivo_pdf');
         
-        // Verificar que el archivo existe y es válido
+        // Verificar que el archivo existe
         if (!$archivo) {
             return redirect()->back()
                 ->withErrors(['archivo_pdf' => 'No se pudo obtener el archivo. Verifique que el formulario tenga enctype="multipart/form-data".'])
                 ->withInput();
         }
 
+        // Validar el archivo con mensajes personalizados
+        try {
+            $validated = $request->validate([
+                'archivo_pdf' => [
+                    'required',
+                    'file',
+                    'mimes:pdf',
+                    'max:102400', // 100MB en kilobytes
+                ],
+            ], [
+                'archivo_pdf.required' => 'Debe seleccionar un archivo PDF.',
+                'archivo_pdf.uploaded' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (100MB) y que el formulario tenga enctype="multipart/form-data".',
+                'archivo_pdf.file' => 'El archivo debe ser un archivo válido.',
+                'archivo_pdf.mimes' => 'El archivo debe ser un PDF (formato .pdf).',
+                'archivo_pdf.max' => 'El archivo no debe ser mayor a 100MB. Verifique la configuración de PHP (upload_max_filesize y post_max_size).',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Si hay un error de validación relacionado con uploaded, dar un mensaje más claro
+            $errors = $e->errors();
+            if (isset($errors['archivo_pdf']) && in_array('validation.uploaded', $errors['archivo_pdf'])) {
+                return redirect()->back()
+                    ->withErrors(['archivo_pdf' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (10MB) y que el formulario tenga enctype="multipart/form-data".'])
+                    ->withInput();
+            }
+            throw $e;
+        }
+
+        // El archivo ya fue obtenido antes de la validación
+
         if (!$archivo->isValid()) {
             $errorCode = $archivo->getError();
             $errorMessage = match($errorCode) {
-                UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 10MB.',
+                UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 100MB.',
                 UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente. Intente nuevamente.',
                 UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
                 UPLOAD_ERR_NO_TMP_DIR => 'Error del servidor: falta el directorio temporal.',
@@ -90,29 +111,43 @@ class PartituraController extends Controller
     {
         Gate::authorize('update', $partitura);
 
-        // Validar el archivo con mensajes personalizados
-        $validated = $request->validate([
-            'archivo_pdf' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:10240', // 10MB en kilobytes
-            ],
-        ], [
-            'archivo_pdf.file' => 'El archivo debe ser un archivo válido.',
-            'archivo_pdf.mimes' => 'El archivo debe ser un PDF (formato .pdf).',
-            'archivo_pdf.max' => 'El archivo no debe ser mayor a 10MB.',
-        ]);
-
-        // Obtener el archivo si existe
+        // Obtener el archivo si existe antes de validar
         $archivo = $request->file('archivo_pdf');
+        
+        // Validar el archivo con mensajes personalizados solo si existe
+        if ($archivo) {
+            try {
+                $validated = $request->validate([
+                    'archivo_pdf' => [
+                        'nullable',
+                        'file',
+                        'mimes:pdf',
+                        'max:102400', // 100MB en kilobytes
+                    ],
+                ], [
+                    'archivo_pdf.uploaded' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (100MB) y que el formulario tenga enctype="multipart/form-data".',
+                    'archivo_pdf.file' => 'El archivo debe ser un archivo válido.',
+                    'archivo_pdf.mimes' => 'El archivo debe ser un PDF (formato .pdf).',
+                    'archivo_pdf.max' => 'El archivo no debe ser mayor a 100MB.',
+                ]);
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                // Si hay un error de validación relacionado con uploaded, dar un mensaje más claro
+                $errors = $e->errors();
+                if (isset($errors['archivo_pdf']) && in_array('validation.uploaded', $errors['archivo_pdf'])) {
+                    return redirect()->back()
+                        ->withErrors(['archivo_pdf' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (10MB) y que el formulario tenga enctype="multipart/form-data".'])
+                        ->withInput();
+                }
+                throw $e;
+            }
+        }
         
         // Si hay archivo, verificar que es válido
         if ($archivo) {
             if (!$archivo->isValid()) {
                 $errorCode = $archivo->getError();
                 $errorMessage = match($errorCode) {
-                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 10MB.',
+                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 100MB.',
                     UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente. Intente nuevamente.',
                     UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
                     UPLOAD_ERR_NO_TMP_DIR => 'Error del servidor: falta el directorio temporal.',

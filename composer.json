@@ -2,10 +2,16 @@
     "name": "escuela-tambores/platform",
     "type": "project",
     "description": "Plataforma web tipo Coursera para escuela de tambores",
-    "keywords": ["laravel", "framework", "tambores", "educacion"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "tambores",
+        "educacion"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
@@ -35,7 +41,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -66,4 +73,3 @@
     "minimum-stability": "dev",
     "prefer-stable": true
 }
-

@@ -52,7 +52,7 @@ if [ -z "$APP_URL" ]; then
     elif [ -n "$VERCEL_URL" ]; then
         export APP_URL="https://${VERCEL_URL}"
     elif [ "$APP_ENV" = "production" ]; then
-        # Si estamos en producción, asumir HTTPS
+        # Si estamos en producción, usar la URL de Railway
         export APP_URL="https://proyecto-estudio-production.up.railway.app"
     fi
 fi

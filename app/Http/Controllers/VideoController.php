@@ -19,22 +19,34 @@ class VideoController extends Controller
         Gate::authorize('create', Video::class);
 
         // Validar con mensajes personalizados
-        $validated = $request->validate([
-            'tambor_id' => ['required', 'exists:tambores,id'],
-            'url_video' => ['nullable', 'url'],
-            'video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg', 'max:102400'], // 100MB en kilobytes
-            'orden_ejecucion' => ['required', 'integer', 'min:0'],
-        ], [
-            'tambor_id.required' => 'Debe seleccionar un tambor.',
-            'tambor_id.exists' => 'El tambor seleccionado no existe.',
-            'url_video.url' => 'La URL del video no es válida.',
-            'video_file.file' => 'El archivo debe ser un archivo válido.',
-            'video_file.mimes' => 'El archivo debe ser un video (formato: mp4, webm u ogg).',
-            'video_file.max' => 'El archivo no debe ser mayor a 100MB.',
-            'orden_ejecucion.required' => 'El orden de ejecución es requerido.',
-            'orden_ejecucion.integer' => 'El orden de ejecución debe ser un número entero.',
-            'orden_ejecucion.min' => 'El orden de ejecución debe ser mayor o igual a 0.',
-        ]);
+        try {
+            $validated = $request->validate([
+                'tambor_id' => ['required', 'exists:tambores,id'],
+                'url_video' => ['nullable', 'url'],
+                'video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg', 'max:204800'], // 200MB en kilobytes
+                'orden_ejecucion' => ['required', 'integer', 'min:0'],
+            ], [
+                'tambor_id.required' => 'Debe seleccionar un tambor.',
+                'tambor_id.exists' => 'El tambor seleccionado no existe.',
+                'url_video.url' => 'La URL del video no es válida.',
+                'video_file.uploaded' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (200MB) y que el formulario tenga enctype="multipart/form-data".',
+                'video_file.file' => 'El archivo debe ser un archivo válido.',
+                'video_file.mimes' => 'El archivo debe ser un video (formato: mp4, webm u ogg).',
+                'video_file.max' => 'El archivo no debe ser mayor a 200MB.',
+                'orden_ejecucion.required' => 'El orden de ejecución es requerido.',
+                'orden_ejecucion.integer' => 'El orden de ejecución debe ser un número entero.',
+                'orden_ejecucion.min' => 'El orden de ejecución debe ser mayor o igual a 0.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Si hay un error de validación relacionado con uploaded, dar un mensaje más claro
+            $errors = $e->errors();
+            if (isset($errors['video_file']) && in_array('validation.uploaded', $errors['video_file'])) {
+                return redirect()->back()
+                    ->withErrors(['video_file' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (100MB) y que el formulario tenga enctype="multipart/form-data".'])
+                    ->withInput();
+            }
+            throw $e;
+        }
 
         // Verificar que se proporcione al menos una URL o un archivo
         $hasFile = $request->hasFile('video_file');
@@ -59,7 +71,7 @@ class VideoController extends Controller
             if (!$archivo->isValid()) {
                 $errorCode = $archivo->getError();
                 $errorMessage = match($errorCode) {
-                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 100MB.',
+                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 200MB.',
                     UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente. Intente nuevamente.',
                     UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
                     UPLOAD_ERR_NO_TMP_DIR => 'Error del servidor: falta el directorio temporal.',
@@ -100,22 +112,34 @@ class VideoController extends Controller
         Gate::authorize('update', $video);
 
         // Validar con mensajes personalizados
-        $validated = $request->validate([
-            'tambor_id' => ['required', 'exists:tambores,id'],
-            'url_video' => ['nullable', 'url'],
-            'video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg', 'max:102400'], // 100MB en kilobytes
-            'orden_ejecucion' => ['required', 'integer', 'min:0'],
-        ], [
-            'tambor_id.required' => 'Debe seleccionar un tambor.',
-            'tambor_id.exists' => 'El tambor seleccionado no existe.',
-            'url_video.url' => 'La URL del video no es válida.',
-            'video_file.file' => 'El archivo debe ser un archivo válido.',
-            'video_file.mimes' => 'El archivo debe ser un video (formato: mp4, webm u ogg).',
-            'video_file.max' => 'El archivo no debe ser mayor a 100MB.',
-            'orden_ejecucion.required' => 'El orden de ejecución es requerido.',
-            'orden_ejecucion.integer' => 'El orden de ejecución debe ser un número entero.',
-            'orden_ejecucion.min' => 'El orden de ejecución debe ser mayor o igual a 0.',
-        ]);
+        try {
+            $validated = $request->validate([
+                'tambor_id' => ['required', 'exists:tambores,id'],
+                'url_video' => ['nullable', 'url'],
+                'video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg', 'max:204800'], // 200MB en kilobytes
+                'orden_ejecucion' => ['required', 'integer', 'min:0'],
+            ], [
+                'tambor_id.required' => 'Debe seleccionar un tambor.',
+                'tambor_id.exists' => 'El tambor seleccionado no existe.',
+                'url_video.url' => 'La URL del video no es válida.',
+                'video_file.uploaded' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (200MB) y que el formulario tenga enctype="multipart/form-data".',
+                'video_file.file' => 'El archivo debe ser un archivo válido.',
+                'video_file.mimes' => 'El archivo debe ser un video (formato: mp4, webm u ogg).',
+                'video_file.max' => 'El archivo no debe ser mayor a 200MB.',
+                'orden_ejecucion.required' => 'El orden de ejecución es requerido.',
+                'orden_ejecucion.integer' => 'El orden de ejecución debe ser un número entero.',
+                'orden_ejecucion.min' => 'El orden de ejecución debe ser mayor o igual a 0.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Si hay un error de validación relacionado con uploaded, dar un mensaje más claro
+            $errors = $e->errors();
+            if (isset($errors['video_file']) && in_array('validation.uploaded', $errors['video_file'])) {
+                return redirect()->back()
+                    ->withErrors(['video_file' => 'El archivo no se pudo subir. Verifique que el archivo no exceda el tamaño máximo permitido (100MB) y que el formulario tenga enctype="multipart/form-data".'])
+                    ->withInput();
+            }
+            throw $e;
+        }
 
         // Si hay archivo, verificar que es válido
         if ($request->hasFile('video_file')) {
@@ -130,7 +154,7 @@ class VideoController extends Controller
             if (!$archivo->isValid()) {
                 $errorCode = $archivo->getError();
                 $errorMessage = match($errorCode) {
-                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 100MB.',
+                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 200MB.',
                     UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente. Intente nuevamente.',
                     UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
                     UPLOAD_ERR_NO_TMP_DIR => 'Error del servidor: falta el directorio temporal.',
