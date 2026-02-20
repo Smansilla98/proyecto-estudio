@@ -111,6 +111,10 @@ if [ "$db_connected" = false ]; then
     echo "⚠ Advertencia: No se pudo verificar la conexión a la base de datos, continuando..."
 fi
 
+# Descubrir paquetes (necesario después de composer install)
+echo "Descubriendo paquetes..."
+php artisan package:discover --ansi || true
+
 # Optimizar Laravel para producción
 echo "Optimizando Laravel..."
 php artisan config:cache || true

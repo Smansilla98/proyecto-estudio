@@ -49,12 +49,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 # Copiar el resto de los archivos de la aplicación (necesarios para compilar assets)
 COPY . .
 
-# Instalar dependencias de Node.js y compilar assets de Vite
-RUN npm ci || npm install \
-    && npm run build \
-    && rm -rf node_modules
-
-# Crear directorios necesarios y configurar permisos antes de ejecutar composer
+# Crear directorios necesarios ANTES de ejecutar scripts de Laravel
 RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
     && mkdir -p /var/www/html/storage/logs \
     && mkdir -p /var/www/html/storage/app/public/partituras \
@@ -64,9 +59,17 @@ RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Configurar variable de entorno para composer y ejecutar scripts
+# Configurar variable de entorno para composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer dump-autoload --optimize
+
+# Ejecutar dump-autoload sin scripts (evita ejecutar package:discover durante el build)
+# package:discover se ejecutará en docker-entrypoint.sh cuando todo esté configurado
+RUN composer dump-autoload --optimize --no-scripts
+
+# Instalar dependencias de Node.js y compilar assets de Vite
+RUN npm ci || npm install \
+    && npm run build \
+    && rm -rf node_modules
 
 # Crear enlace simbólico de storage (también se ejecuta en docker-entrypoint.sh por si acaso)
 RUN php artisan storage:link || true
