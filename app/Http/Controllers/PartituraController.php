@@ -108,10 +108,31 @@ class PartituraController extends Controller
         $archivo = $request->file('archivo_pdf');
         
         // Si hay archivo, verificar que es válido
-        if ($archivo && !$archivo->isValid()) {
-            return redirect()->back()
-                ->withErrors(['archivo_pdf' => 'El archivo no es válido o no se pudo subir.'])
-                ->withInput();
+        if ($archivo) {
+            if (!$archivo->isValid()) {
+                $errorCode = $archivo->getError();
+                $errorMessage = match($errorCode) {
+                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'El archivo es demasiado grande. El tamaño máximo permitido es 10MB.',
+                    UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente. Intente nuevamente.',
+                    UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
+                    UPLOAD_ERR_NO_TMP_DIR => 'Error del servidor: falta el directorio temporal.',
+                    UPLOAD_ERR_CANT_WRITE => 'Error del servidor: no se pudo escribir el archivo.',
+                    UPLOAD_ERR_EXTENSION => 'Error del servidor: una extensión de PHP detuvo la subida del archivo.',
+                    default => 'El archivo no es válido o no se pudo subir. Código de error: ' . $errorCode,
+                };
+                
+                return redirect()->back()
+                    ->withErrors(['archivo_pdf' => $errorMessage])
+                    ->withInput();
+            }
+
+            // Verificar el tipo MIME del archivo
+            $mimeType = $archivo->getMimeType();
+            if ($mimeType !== 'application/pdf') {
+                return redirect()->back()
+                    ->withErrors(['archivo_pdf' => 'El archivo debe ser un PDF. Tipo detectado: ' . $mimeType])
+                    ->withInput();
+            }
         }
         
         // Preparar datos sin el archivo
@@ -121,6 +142,16 @@ class PartituraController extends Controller
 
         return redirect()->back()
             ->with('success', 'Partitura actualizada exitosamente.');
+    }
+
+    public function show(Partitura $partitura)
+    {
+        Gate::authorize('view', $partitura);
+
+        $partitura->load(['ritmo.tambores']);
+        $partituraUrl = $this->partituraService->getUrl($partitura);
+
+        return view('partituras.show', compact('partitura', 'partituraUrl'));
     }
 
     public function destroy(Partitura $partitura)

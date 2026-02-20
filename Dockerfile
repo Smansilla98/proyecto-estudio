@@ -45,6 +45,8 @@ RUN npm ci || npm install \
 # Crear directorios necesarios y configurar permisos antes de ejecutar composer
 RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
     && mkdir -p /var/www/html/storage/logs \
+    && mkdir -p /var/www/html/storage/app/public/partituras \
+    && mkdir -p /var/www/html/storage/app/public/videos \
     && mkdir -p /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
@@ -53,6 +55,9 @@ RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
 # Configurar variable de entorno para composer y ejecutar scripts
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer dump-autoload --optimize
+
+# Crear enlace simbólico de storage (también se ejecuta en docker-entrypoint.sh por si acaso)
+RUN php artisan storage:link || true
 
 # Copiar script de inicio
 COPY docker-entrypoint.sh /usr/local/bin/

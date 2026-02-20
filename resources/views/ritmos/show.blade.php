@@ -338,15 +338,20 @@
             @foreach($ritmo->partituras as $partitura)
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
-                    <span>Partitura PDF</span>
+                    <i class="bi bi-file-earmark-music text-primary me-2"></i>
+                    <span>Partitura: {{ $ritmo->nombre }}</span>
                 </div>
                 <div class="d-flex gap-2">
+                    <a href="{{ route('partituras.show', $partitura) }}" 
+                       class="btn btn-sm btn-success">
+                        <i class="bi bi-play-circle me-1"></i>
+                        Ver/Reproducir
+                    </a>
                     <a href="{{ filter_var($partitura->archivo_pdf, FILTER_VALIDATE_URL) ? $partitura->archivo_pdf : (config('filesystems.default') === 's3' ? Storage::disk('s3')->url($partitura->archivo_pdf) : Storage::url($partitura->archivo_pdf)) }}" 
                        target="_blank" 
                        class="btn btn-sm btn-primary">
                         <i class="bi bi-download me-1"></i>
-                        Descargar
+                        Descargar PDF
                     </a>
                     @can('delete', $partitura)
                     <form action="{{ route('partituras.destroy', $partitura) }}" method="POST" class="d-inline">

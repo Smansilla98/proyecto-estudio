@@ -34,14 +34,19 @@
                         </small>
                     </div>
                     <div class="col-md-4 text-end">
+                        <a href="{{ route('partituras.show', $partitura) }}" 
+                           class="btn btn-success btn-sm">
+                            <i class="bi bi-play-circle me-1"></i>
+                            Ver/Reproducir
+                        </a>
                         <a href="{{ filter_var($partitura->archivo_pdf, FILTER_VALIDATE_URL) ? $partitura->archivo_pdf : (config('filesystems.default') === 's3' ? Storage::disk('s3')->url($partitura->archivo_pdf) : Storage::url($partitura->archivo_pdf)) }}" 
                            target="_blank" 
                            class="btn btn-primary btn-sm">
                             <i class="bi bi-download me-1"></i>
-                            Descargar
+                            Descargar PDF
                         </a>
                         @can('update', $partitura)
-                        <button class="btn btn-success btn-sm" onclick="editPartitura({{ $partitura->id }})">
+                        <button class="btn btn-warning btn-sm" onclick="editPartitura({{ $partitura->id }})">
                             <i class="bi bi-pencil"></i>
                         </button>
                         @endcan

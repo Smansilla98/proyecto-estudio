@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
         $partituras = \App\Models\Partitura::with('ritmo')->latest()->get();
         return view('partituras.index', compact('partituras'));
     })->name('partituras.index');
+    Route::get('/partituras/{partitura}', [PartituraController::class, 'show'])->name('partituras.show');
     Route::post('/ritmos/{ritmo}/partituras', [PartituraController::class, 'store'])->name('partituras.store');
     Route::put('/partituras/{partitura}', [PartituraController::class, 'update'])->name('partituras.update');
     Route::delete('/partituras/{partitura}', [PartituraController::class, 'destroy'])->name('partituras.destroy');

@@ -16,8 +16,10 @@ class VideoService
     public function create(array $data, ?UploadedFile $file = null): Video
     {
         if ($file) {
-            $disk = config('filesystems.default', 'local');
-            $path = $file->store('videos', $disk);
+            $disk = 'public';
+            // Guardar con el nombre original y extensión
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('videos', $filename, $disk);
             $data['url_video'] = $path;
         } elseif (empty($data['url_video'])) {
             throw new \InvalidArgumentException('Debe proporcionar una URL o un archivo de video.');
@@ -29,7 +31,7 @@ class VideoService
     public function update(Video $video, array $data, ?UploadedFile $file = null): Video
     {
         if ($file) {
-            $disk = config('filesystems.default', 'local');
+            $disk = 'public';
             
             // Eliminar video anterior si existe y no es URL externa
             if ($video->url_video && !filter_var($video->url_video, FILTER_VALIDATE_URL)) {
@@ -38,7 +40,9 @@ class VideoService
                 }
             }
 
-            $path = $file->store('videos', $disk);
+            // Guardar con el nombre original y extensión
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('videos', $filename, $disk);
             $data['url_video'] = $path;
         }
 
@@ -50,7 +54,7 @@ class VideoService
     {
         // Solo eliminar si no es una URL externa
         if ($video->url_video && !filter_var($video->url_video, FILTER_VALIDATE_URL)) {
-            $disk = config('filesystems.default', 'local');
+            $disk = 'public';
             if (Storage::disk($disk)->exists($video->url_video)) {
                 Storage::disk($disk)->delete($video->url_video);
             }
@@ -65,7 +69,7 @@ class VideoService
             return $video->url_video;
         }
 
-        $disk = config('filesystems.default', 'local');
+        $disk = 'public';
         return Storage::disk($disk)->url($video->url_video);
     }
 }

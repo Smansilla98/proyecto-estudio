@@ -16,8 +16,10 @@ class PartituraService
     public function create(array $data, ?UploadedFile $file = null): Partitura
     {
         if ($file) {
-            $disk = config('filesystems.default', 'local');
-            $path = $file->store('partituras', $disk);
+            $disk = 'public';
+            // Guardar con el nombre original y extensión
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('partituras', $filename, $disk);
             $data['archivo_pdf'] = $path;
         }
 
@@ -27,7 +29,7 @@ class PartituraService
     public function update(Partitura $partitura, array $data, ?UploadedFile $file = null): Partitura
     {
         if ($file) {
-            $disk = config('filesystems.default', 'local');
+            $disk = 'public';
             
             // Eliminar PDF anterior si existe y no es URL externa
             if ($partitura->archivo_pdf && !filter_var($partitura->archivo_pdf, FILTER_VALIDATE_URL)) {
@@ -36,7 +38,9 @@ class PartituraService
                 }
             }
 
-            $path = $file->store('partituras', $disk);
+            // Guardar con el nombre original y extensión
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('partituras', $filename, $disk);
             $data['archivo_pdf'] = $path;
         }
 
@@ -48,7 +52,7 @@ class PartituraService
     {
         // Solo eliminar si no es una URL externa
         if ($partitura->archivo_pdf && !filter_var($partitura->archivo_pdf, FILTER_VALIDATE_URL)) {
-            $disk = config('filesystems.default', 'local');
+            $disk = 'public';
             if (Storage::disk($disk)->exists($partitura->archivo_pdf)) {
                 Storage::disk($disk)->delete($partitura->archivo_pdf);
             }
@@ -67,7 +71,7 @@ class PartituraService
             return $partitura->archivo_pdf;
         }
 
-        $disk = config('filesystems.default', 'local');
+        $disk = 'public';
         return Storage::disk($disk)->url($partitura->archivo_pdf);
     }
 }
